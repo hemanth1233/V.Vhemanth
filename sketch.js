@@ -1,47 +1,116 @@
 var trex, trex_running, trex_collided;
 var ground, invisibleGround, groundImage;
 
-function preload() {
-  trex_running = loadAnimation("trex1.png", "trex3.png", "trex4.png");
-  trex_collided = loadImage("trex_collided.png");
+var cloud, cloudsGroup, cloudImage;
 
-  groundImage = loadImage("ground2.png")
+
+
+var newImage;
+
+function preload(){
+  trex_running = loadAnimation("trex1.png","trex3.png","trex4.png");
+  trex_collided = loadAnimation("trex_collided.png");
+  
+  groundImage = loadImage("ground2.png");
+  
+  cloudImage = loadImage("cloud.png");
+
+ bostacle1 = loadAnimation("obstacle1.png");
+ bostacle2 = loadAnimation("obstacle2.png");
+ bostacle3 = loadAnimation("obstacle3.png");
+ bostacle4 = loadAnimation("obstacle4.png");
+ bostacle5 = loadAnimation("obstacle5.png")
+ bostacle6  = loadAnimation("obstacle6.png");
+ 
 }
 
 function setup() {
   createCanvas(600, 200);
 
-  //create a trex sprite
   trex = createSprite(50,160,20,50);
   trex.addAnimation("running", trex_running);
+  // trex.addAnimation("collided",trex_collided)
   trex.scale = 0.5;
   
-  //create a ground sprite
   ground = createSprite(200,180,400,20);
   ground.addImage("ground",groundImage);
   ground.x = ground.width /2;
   ground.velocityX = -4;
- //creating invisivbel ground
-invisibleGround = createSprite(200,190,400,10) 
-invisibleGround.visible=false
+  
+  invisibleGround = createSprite(200,190,400,10);
+  invisibleGround.visible = false;
+  
+  console.log("Hello"+ 5)
+  
 }
-
-
 
 function draw() {
-  background(220);
-
-  //jump when the space button is pressed
-  if (keyDown("space")&&trex.y>=100) { 
+  background(180);
+  
+  
+  if(keyDown("space")&& trex.y >= 100) {
     trex.velocityY = -10;
   }
-
+  
   trex.velocityY = trex.velocityY + 0.8
-
-  if (ground.x < 0) {
-    ground.x = ground.width / 2;
+  
+  if (ground.x < 0){
+    ground.x = ground.width/2;
   }
-
+  
   trex.collide(invisibleGround);
+  
+  //spawn the clouds
+  spawnClouds();
+  spawnobstacle();
   drawSprites();
 }
+
+function spawnClouds() {
+  //write code here to spawn the clouds
+  if (frameCount % 60 === 0) {
+    cloud = createSprite(600,100,40,10);
+    cloud.addImage(cloudImage)
+    cloud.y = Math.round(random(10,60))
+    cloud.scale = 0.4;
+    cloud.velocityX = -3;
+    
+    
+    //assigning lifetime to the variable
+    cloud.lifetime = 134
+    
+    //adjust the depth
+    cloud.depth = trex.depth
+    trex.depth = trex.depth + 1;
+    }
+  }
+  function spawnobstacle(){
+    if(frameCount%60===0){
+   var obstacles = createSprite(600,165,10,40)
+   obstacles.velocityX=-6
+    
+
+  
+  var rand=Math.round(random(1,6));
+switch(rand){
+case 1:obstacles.addImage(bostacle1);
+break;
+case 2:obstacles.addImage(bostacle2);
+
+break;
+case 3:obstacles.addImage(bostacle3);
+
+
+break;
+case 5:obstacles.addImage(bostacle5);
+break;
+case 6:obstacles.addImage(bostacle6);
+break;
+default: break;
+}
+obstacles.scale=0.5;
+obstacles.lifetime=300
+}}
+
+
+
